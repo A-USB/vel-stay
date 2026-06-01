@@ -27,7 +27,7 @@ export default function Layout() {
         {/* Brand */}
         <div className={`flex items-center gap-2 px-4 py-5 border-b border-outline-variant ${collapsed ? 'justify-center' : ''}`}>
           <span className="material-symbols-outlined text-primary text-2xl">restaurant_menu</span>
-          {!collapsed && <span className="font-bold text-emerald-900 text-sm">RestoHost Pro</span>}
+          {!collapsed && <span className="font-bold text-emerald-900 text-sm">VelStay</span>}
         </div>
 
         {/* Nav */}

@@ -1,7 +1,7 @@
 {
   "name": "restohost-pro-backend",
   "version": "1.0.0",
-  "description": "RestoHost Pro - Restaurant Management Backend API",
+  "description": "VelStay - Restaurant Management Backend API",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

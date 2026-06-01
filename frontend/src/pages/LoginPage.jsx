@@ -35,7 +35,7 @@ export default function LoginPage() {
           <div className="flex flex-col items-center text-center space-y-2 mb-8">
             <div className="flex items-center gap-2 mb-3">
               <span className="material-symbols-outlined text-primary text-3xl">restaurant_menu</span>
-              <span className="text-xl font-bold text-emerald-900">RestoHost Pro</span>
+              <span className="text-xl font-bold text-emerald-900">VelStay</span>
             </div>
             <h1 className="text-2xl font-bold text-on-surface">Welcome back</h1>
             <p className="text-sm text-on-surface-variant">Manage your reservations and kitchen with ease.</p>

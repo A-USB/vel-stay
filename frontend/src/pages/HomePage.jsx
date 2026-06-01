@@ -15,7 +15,7 @@ export default function HomePage() {
       <nav className="flex items-center justify-between px-8 py-4 border-b border-outline-variant bg-surface-container-lowest">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-primary text-2xl">restaurant_menu</span>
-          <span className="font-bold text-emerald-900">RestoHost Pro</span>
+          <span className="font-bold text-emerald-900">VelStay</span>
         </div>
         <div className="flex items-center gap-4">
           <Link to="/login" className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Sign In</Link>
@@ -34,7 +34,7 @@ export default function HomePage() {
           Run your restaurant <span className="text-primary">smarter</span>, not harder.
         </h1>
         <p className="text-lg text-on-surface-variant max-w-xl mb-10">
-          RestoHost Pro brings reservations, clients, menus, and analytics into one elegant dashboard built for modern restaurateurs.
+          VelStay brings reservations, clients, menus, and analytics into one elegant dashboard built for modern restaurateurs.
         </p>
         <div className="flex gap-4">
           <Link to="/signup" className="bg-primary text-on-primary font-semibold px-8 py-3 rounded-full hover:opacity-90 transition-all">
@@ -67,7 +67,7 @@ export default function HomePage() {
       {/* CTA */}
       <section className="bg-primary text-on-primary px-8 py-16 text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to elevate your service?</h2>
-        <p className="text-on-primary/80 mb-8">Join hundreds of restaurants managing their business with RestoHost Pro.</p>
+        <p className="text-on-primary/80 mb-8">Join hundreds of restaurants managing their business with VelStay.</p>
         <Link to="/signup" className="bg-on-primary text-primary font-bold px-10 py-3 rounded-full hover:opacity-90 transition-all">
           Get started today
         </Link>

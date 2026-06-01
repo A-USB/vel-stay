@@ -33,7 +33,7 @@ export default function SignUpPage() {
           <div className="flex flex-col items-center text-center space-y-2 mb-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="material-symbols-outlined text-primary text-3xl">restaurant_menu</span>
-              <span className="text-xl font-bold text-emerald-900">RestoHost Pro</span>
+              <span className="text-xl font-bold text-emerald-900">VelStay</span>
             </div>
             <h1 className="text-2xl font-bold text-on-surface">Create your account</h1>
             <p className="text-sm text-on-surface-variant">Start managing your restaurant smarter.</p>

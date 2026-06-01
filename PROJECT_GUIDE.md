@@ -1,4 +1,4 @@
-# RestoHost Pro Project Guide
+# VelStay Project Guide
 
 ## Quick Start
 
