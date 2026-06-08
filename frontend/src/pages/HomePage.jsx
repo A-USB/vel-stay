@@ -10,32 +10,17 @@ export default function HomePage() {
       {/* Navbar */}
       <nav className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-100">
         <span className="font-bold text-lg text-[#0d1f1a] tracking-tight">VelStay</span>
-        <div className="hidden md:flex items-center gap-10 text-sm font-medium text-[#555]">
-          <a href="#" className="text-[#0d1f1a] font-semibold border-b-2 border-[#0d1f1a] pb-0.5">Home</a>
-          <a href="#" className="hover:text-[#0d1f1a] transition-colors">Solutions</a>
-          <a href="#" className="hover:text-[#0d1f1a] transition-colors">Pricing</a>
-          <a href="#" className="hover:text-[#0d1f1a] transition-colors">Resources</a>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="text-[#555] hover:text-[#0d1f1a]">
-            <span className="material-symbols-outlined text-xl">notifications</span>
-          </button>
-          <button className="text-[#555] hover:text-[#0d1f1a]">
-            <span className="material-symbols-outlined text-xl">help</span>
-          </button>
-          <Link
-            to="/signup"
-            className="bg-[#0d3d2e] text-white text-sm font-semibold px-5 py-2 rounded-md hover:bg-[#0a2e22] transition-colors"
-          >
-            Join
-          </Link>
-        </div>
+        <Link
+          to="/signup"
+          className="bg-[#0d3d2e] text-white text-sm font-semibold px-5 py-2 rounded-md hover:bg-[#0a2e22] transition-colors"
+        >
+          Join
+        </Link>
       </nav>
 
       {/* Hero */}
       <section className="bg-white px-8 md:px-16 py-20">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
-          {/* Left */}
           <div className="flex-1 space-y-6">
             <span className="inline-block bg-[#c6f0e2] text-[#0d3d2e] text-xs font-bold px-4 py-1.5 rounded-full tracking-widest uppercase">
               The New Standard
@@ -53,16 +38,14 @@ export default function HomePage() {
               >
                 Get Started
               </Link>
-              <a
-                href="#"
+              <button
                 className="border border-[#0d3d2e] text-[#0d3d2e] font-semibold text-sm px-6 py-3 rounded-md hover:bg-[#f0faf6] transition-colors"
               >
                 Book a Demo
-              </a>
+              </button>
             </div>
           </div>
 
-          {/* Right — food image */}
           <div className="flex-1 flex justify-center md:justify-end">
             <div className="rounded-2xl overflow-hidden border border-[#e0e0e0] shadow-sm w-full max-w-md aspect-[4/3] bg-gray-100">
               <img
@@ -88,7 +71,6 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Card 1 — Smart Reservations */}
             <div className="bg-white rounded-2xl p-8 space-y-4 shadow-sm">
               <div className="w-12 h-12 bg-[#0d3d2e] rounded-xl flex items-center justify-center">
                 <span className="material-symbols-outlined text-white text-xl">calendar_month</span>
@@ -99,7 +81,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Card 2 — Guest Insights */}
             <div className="bg-white rounded-2xl p-8 space-y-4 shadow-sm">
               <div className="w-12 h-12 bg-[#e8eeea] rounded-xl flex items-center justify-center">
                 <span className="material-symbols-outlined text-[#0d3d2e] text-xl">group</span>
@@ -110,7 +91,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Card 3 — Menu Management */}
             <div className="bg-white rounded-2xl p-8 space-y-4 shadow-sm">
               <div className="w-12 h-12 bg-[#e8eeea] rounded-xl flex items-center justify-center">
                 <span className="material-symbols-outlined text-[#0d3d2e] text-xl">no_food</span>
@@ -124,7 +104,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Card 4 — Global Command Center (dark) */}
             <div className="bg-[#0d3d2e] rounded-2xl p-8 space-y-5 shadow-sm">
               <p className="text-[#a8d5c2] text-xs font-semibold tracking-widest uppercase">
                 Global Command Center
@@ -142,12 +121,11 @@ export default function HomePage() {
                   <p className="text-[#a8d5c2] text-xs">Avg Setup</p>
                 </div>
               </div>
-              <a
-                href="#"
-                className="inline-block border border-white/40 text-white text-xs font-semibold px-5 py-2.5 rounded-md hover:bg-white/10 transition-colors"
+              <button
+                className="border border-white/40 text-white text-xs font-semibold px-5 py-2.5 rounded-md hover:bg-white/10 transition-colors"
               >
                 View Enterprise Features
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -170,7 +148,6 @@ export default function HomePage() {
       {/* CTA */}
       <section className="px-8 md:px-16 py-16 bg-[#eef0ee]">
         <div className="max-w-3xl mx-auto bg-[#0d3d2e] rounded-2xl px-10 py-14 text-center space-y-5 relative overflow-hidden">
-          {/* Decorative shapes bottom-left */}
           <div className="absolute -left-10 -bottom-6 w-40 h-40 bg-[#0a2e22] rounded-2xl" />
           <div className="absolute left-4 bottom-4 w-24 h-24 bg-[#1a5c44] rounded-xl opacity-60" />
 
@@ -185,12 +162,11 @@ export default function HomePage() {
             >
               Start Free Trial
             </Link>
-            <a
-              href="#"
+            <button
               className="border border-white/40 text-white font-semibold text-sm px-8 py-3 rounded-md hover:bg-white/10 transition-colors"
             >
               Contact Sales
-            </a>
+            </button>
           </div>
         </div>
       </section>
