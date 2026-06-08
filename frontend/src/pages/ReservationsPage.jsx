@@ -81,15 +81,51 @@ function UpcomingCard({ r, selected, onClick }) {
 
 const emptyForm = { clientName: '', date: '', time: '', partySize: '', table: '', specialRequests: '' };
 
-function BookingModal({ editing, initialDate, onClose, onCreate, onUpdate, loading }) {
+function BookingModal({ editing, initialDate, onClose, onCreate, onUpdate, loading, apiError }) {
   const [form, setForm] = useState(
     editing
-      ? { clientName: editing.clientName, date: editing.date, time: editing.time, partySize: editing.partySize, table: editing.table, specialRequests: editing.specialRequests || '' }
+      ? { clientName: editing.clientName, date: editing.date, time: editing.time, partySize: String(editing.partySize), table: editing.table || '', specialRequests: editing.specialRequests || '' }
       : { ...emptyForm, date: initialDate || '' }
   );
-  const set = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const [errors, setErrors] = useState({});
+  const set = e => {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+    setErrors(err => ({ ...err, [name]: '' }));
+  };
 
-  const handleSubmit = () => editing ? onUpdate({ id: editing.id, data: form }) : onCreate(form);
+  const validate = () => {
+    const e = {};
+    if (!form.clientName.trim()) e.clientName = 'Guest name is required';
+    if (!form.date) e.date = 'Date is required';
+    if (!form.time) e.time = 'Time is required';
+    if (!form.partySize || Number(form.partySize) < 1) e.partySize = 'Party size must be at least 1';
+    return e;
+  };
+
+  const handleSubmit = () => {
+    const e = validate();
+    if (Object.keys(e).length > 0) { setErrors(e); return; }
+
+    // Coerce partySize to number and send default status for new bookings
+    const payload = {
+      ...form,
+      partySize: Number(form.partySize),
+      ...(editing ? {} : { status: 'pending' }),
+    };
+
+    if (editing) onUpdate({ id: editing.id, data: payload });
+    else onCreate(payload);
+  };
+
+  const fields = [
+    { name: 'clientName', label: 'Guest Name', type: 'text', placeholder: 'Full name' },
+    { name: 'date', label: 'Date', type: 'date', placeholder: '' },
+    { name: 'time', label: 'Time', type: 'time', placeholder: '' },
+    { name: 'partySize', label: 'Party Size', type: 'number', placeholder: '2' },
+    { name: 'table', label: 'Table', type: 'text', placeholder: 'e.g. V04 (Window)' },
+    { name: 'specialRequests', label: 'Special Requests (optional)', type: 'text', placeholder: 'Any notes…' },
+  ];
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -100,27 +136,47 @@ function BookingModal({ editing, initialDate, onClose, onCreate, onUpdate, loadi
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
-        {[
-          { name: 'clientName', label: 'Guest Name', type: 'text', placeholder: 'Full name' },
-          { name: 'date', label: 'Date', type: 'date', placeholder: '' },
-          { name: 'time', label: 'Time', type: 'time', placeholder: '' },
-          { name: 'partySize', label: 'Party Size', type: 'number', placeholder: '2' },
-          { name: 'table', label: 'Table', type: 'text', placeholder: 'e.g. V04 (Window)' },
-          { name: 'specialRequests', label: 'Special Requests', type: 'text', placeholder: 'Any notes…' },
-        ].map(f => (
+
+        {/* API-level error */}
+        {apiError && (
+          <div className="bg-red-50 border border-red-200 text-red-600 text-xs px-3 py-2.5 rounded-lg">
+            {apiError}
+          </div>
+        )}
+
+        {fields.map(f => (
           <div key={f.name}>
             <label className="text-xs font-semibold text-[#888] block mb-1">{f.label}</label>
             <input
               name={f.name} type={f.type} value={form[f.name]} onChange={set}
               placeholder={f.placeholder}
-              className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-[#0d1f1a] focus:outline-none focus:border-[#0d6644] bg-[#fafafa] placeholder-[#ccc]"
+              min={f.name === 'partySize' ? 1 : undefined}
+              className={`w-full px-3 py-2.5 rounded-lg border text-sm text-[#0d1f1a] focus:outline-none bg-[#fafafa] placeholder-[#ccc] transition-colors ${
+                errors[f.name] ? 'border-red-400 focus:border-red-400' : 'border-gray-200 focus:border-[#0d6644]'
+              }`}
             />
+            {errors[f.name] && (
+              <p className="text-red-500 text-[11px] mt-1">{errors[f.name]}</p>
+            )}
           </div>
         ))}
+
         <div className="flex gap-3 pt-1">
-          <button onClick={onClose} className="flex-1 border border-gray-200 text-[#555] text-sm py-2.5 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
-          <button onClick={handleSubmit} disabled={loading} className="flex-1 bg-[#0d6644] text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-[#0a5236] transition-colors disabled:opacity-60">
-            {loading ? 'Saving…' : editing ? 'Save Changes' : 'Create Booking'}
+          <button
+            onClick={onClose}
+            className="flex-1 border border-gray-200 text-[#555] text-sm py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="flex-1 bg-[#0d6644] text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-[#0a5236] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            {loading
+              ? <><span className="material-symbols-outlined text-sm animate-spin">refresh</span> Saving…</>
+              : editing ? 'Save Changes' : 'Create Booking'
+            }
           </button>
         </div>
       </div>
@@ -482,6 +538,11 @@ export default function ReservationsPage() {
           onCreate={data => createMutation.mutate(data)}
           onUpdate={({ id, data }) => updateMutation.mutate({ id, data })}
           loading={createMutation.isPending || updateMutation.isPending}
+          apiError={
+            (createMutation.isError && (createMutation.error?.response?.data?.error || 'Failed to create booking. Please try again.')) ||
+            (updateMutation.isError && (updateMutation.error?.response?.data?.error || 'Failed to update booking. Please try again.')) ||
+            null
+          }
         />
       )}
 

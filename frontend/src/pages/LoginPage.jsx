@@ -26,8 +26,13 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      await login(form.email, form.password);
-      navigate('/dashboard');
+      const data = await login(form.email, form.password);
+      // Route based on role returned from backend
+      if (data.user.role === 'manager') {
+        navigate('/dashboard');
+      } else {
+        navigate('/client');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     } finally {
@@ -37,7 +42,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-screen flex items-center justify-center px-4 relative"
       style={{
         backgroundImage: `url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80')`,
         backgroundSize: 'cover',
@@ -55,10 +60,11 @@ export default function LoginPage() {
           boxShadow: '0 8px 40px rgba(0,0,0,0.4)',
         }}
       >
+        {/* Header */}
         <div className="text-center space-y-1">
           <p className="text-[#a8d5c2] text-sm font-semibold tracking-widest uppercase">VelStay</p>
           <h1 className="text-white text-3xl font-bold">Welcome Back</h1>
-          <p className="text-[#a8d5c2] text-sm">Manage your reservations and kitchen with ease</p>
+          <p className="text-[#a8d5c2] text-sm">Sign in to your manager or guest account</p>
         </div>
 
         {error && (
@@ -72,7 +78,7 @@ export default function LoginPage() {
             <label className="text-white/70 text-xs font-medium block">Email address</label>
             <input
               name="email" type="email" value={form.email} onChange={handleChange}
-              placeholder="manager@example.com"
+              placeholder="you@example.com"
               className="w-full px-4 py-3 rounded-lg text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#2ecc8e]"
               style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}
             />
@@ -89,6 +95,7 @@ export default function LoginPage() {
               style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}
             />
           </div>
+
           <button
             type="submit" disabled={loading}
             className="w-full bg-[#0d6644] hover:bg-[#0a5236] text-white font-semibold py-3 rounded-lg text-sm transition-colors disabled:opacity-60 mt-2"
@@ -96,6 +103,13 @@ export default function LoginPage() {
             {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
+
+        {/* Role hint */}
+        <div className="bg-white/10 rounded-xl p-3 text-center">
+          <p className="text-white/60 text-xs">
+            You'll be directed to the right workspace based on your account type automatically.
+          </p>
+        </div>
 
         <div className="flex items-center gap-3">
           <div className="flex-1 h-px bg-white/20" />
@@ -108,15 +122,13 @@ export default function LoginPage() {
             className="flex items-center justify-center gap-2 py-3 rounded-lg text-white text-sm font-medium transition-colors hover:bg-white/20"
             style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}
           >
-            <GoogleIcon />
-            Google
+            <GoogleIcon /> Google
           </button>
           <button
             className="flex items-center justify-center gap-2 py-3 rounded-lg text-white text-sm font-medium transition-colors hover:bg-white/20"
             style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}
           >
-            <span className="material-symbols-outlined text-base">corporate_fare</span>
-            Enterprise
+            <span className="material-symbols-outlined text-base">corporate_fare</span> Enterprise
           </button>
         </div>
 

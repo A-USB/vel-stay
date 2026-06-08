@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
     const data = await authApi.login({ email, password });
     localStorage.setItem('rh_token', data.token);
     setUser(data.user);
-    return data;
+    return data; // return so LoginPage can read data.user.role
   };
 
   const signup = async (formData) => {
@@ -39,8 +39,11 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const isManager = user?.role === 'manager';
+  const isClient = user?.role === 'client';
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, isManager, isClient }}>
       {children}
     </AuthContext.Provider>
   );

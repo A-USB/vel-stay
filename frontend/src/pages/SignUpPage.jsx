@@ -15,7 +15,8 @@ const GoogleIcon = () => (
 export default function SignUpPage() {
   const { signup } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '', restaurant: '', category: '' });
+  const [role, setRole] = useState('manager');
+  const [form, setForm] = useState({ name: '', email: '', password: '', restaurant: '', category: '', phone: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -27,8 +28,8 @@ export default function SignUpPage() {
     if (!form.name || !form.email || !form.password) { setError('All fields are required'); return; }
     setLoading(true);
     try {
-      await signup(form);
-      navigate('/dashboard');
+      await signup({ ...form, role });
+      navigate(role === 'manager' ? '/dashboard' : '/client');
     } catch (err) {
       setError(err.response?.data?.error || 'Signup failed');
     } finally {
@@ -62,14 +63,14 @@ export default function SignUpPage() {
             Join thousands of business owners who trust our platform to streamline reservations, manage menus, and deliver exceptional guest experiences.
           </p>
           <div className="space-y-3 pt-2">
-            <div className="rounded-xl p-4 space-y-1" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+            <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
               <div className="flex items-center gap-2 mb-1">
                 <span className="material-symbols-outlined text-[#2ecc8e] text-base">bolt</span>
                 <p className="text-white font-semibold text-sm">Advanced Analytics</p>
               </div>
               <p className="text-[#a8d5c2] text-xs">Real-time business insights at your fingertips.</p>
             </div>
-            <div className="rounded-xl p-4 space-y-1" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+            <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
               <div className="flex items-center gap-2 mb-1">
                 <span className="material-symbols-outlined text-[#2ecc8e] text-base">bar_chart</span>
                 <p className="text-white font-semibold text-sm">Instant sync</p>
@@ -83,10 +84,49 @@ export default function SignUpPage() {
 
       {/* Right panel */}
       <div className="flex-1 flex items-center justify-center px-8 py-12 bg-white overflow-y-auto">
-        <div className="w-full max-w-md space-y-6">
+        <div className="w-full max-w-md space-y-5">
+
           <div className="space-y-1">
             <h1 className="text-2xl font-bold text-[#0d6644]">Create your account</h1>
             <p className="text-[#777] text-sm">Enter your details to start your 14-day free trial</p>
+          </div>
+
+          {/* Role selector */}
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setRole('manager')}
+              className={`flex flex-col items-center gap-2 py-4 rounded-xl border-2 transition-all ${
+                role === 'manager'
+                  ? 'border-[#0d6644] bg-[#f0faf6]'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className={`material-symbols-outlined text-2xl ${role === 'manager' ? 'text-[#0d6644]' : 'text-[#aaa]'}`}>
+                store
+              </span>
+              <div className="text-center">
+                <p className={`text-sm font-bold ${role === 'manager' ? 'text-[#0d6644]' : 'text-[#444]'}`}>I'm a Manager</p>
+                <p className="text-xs text-[#aaa]">Manage my venue</p>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setRole('client')}
+              className={`flex flex-col items-center gap-2 py-4 rounded-xl border-2 transition-all ${
+                role === 'client'
+                  ? 'border-[#0d6644] bg-[#f0faf6]'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className={`material-symbols-outlined text-2xl ${role === 'client' ? 'text-[#0d6644]' : 'text-[#aaa]'}`}>
+                person
+              </span>
+              <div className="text-center">
+                <p className={`text-sm font-bold ${role === 'client' ? 'text-[#0d6644]' : 'text-[#444]'}`}>I'm a Guest</p>
+                <p className="text-xs text-[#aaa]">Explore & book places</p>
+              </div>
+            </button>
           </div>
 
           {error && (
@@ -98,35 +138,50 @@ export default function SignUpPage() {
               <label className="text-xs font-semibold text-[#444] block">Full Name</label>
               <input name="name" type="text" value={form.name} onChange={handleChange} placeholder="John Doe" className={inputClass} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-[#444] block">Business Name</label>
-                <input name="restaurant" type="text" value={form.restaurant} onChange={handleChange} placeholder="Grand Legacy Hotel" className={inputClass} />
+
+            {/* Manager-only fields */}
+            {role === 'manager' && (
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-[#444] block">Business Name</label>
+                  <input name="restaurant" type="text" value={form.restaurant} onChange={handleChange} placeholder="Grand Legacy Hotel" className={inputClass} />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-[#444] block">Category</label>
+                  <select name="category" value={form.category} onChange={handleChange} className={inputClass} style={{ color: form.category ? '#0d1f1a' : '#aaa' }}>
+                    <option value="" disabled>Select Type</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="cafe">Café</option>
+                    <option value="resort">Resort</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
               </div>
+            )}
+
+            {/* Client-only fields */}
+            {role === 'client' && (
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-[#444] block">Category</label>
-                <select name="category" value={form.category} onChange={handleChange} className={inputClass} style={{ color: form.category ? '#0d1f1a' : '#aaa' }}>
-                  <option value="" disabled>Select Type</option>
-                  <option value="restaurant">Restaurant</option>
-                  <option value="hotel">Hotel</option>
-                  <option value="cafe">Café</option>
-                  <option value="resort">Resort</option>
-                  <option value="other">Other</option>
-                </select>
+                <label className="text-xs font-semibold text-[#444] block">Phone (optional)</label>
+                <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+1 555-0000" className={inputClass} />
               </div>
-            </div>
+            )}
+
             <div className="space-y-1">
               <label className="text-xs font-semibold text-[#444] block">Email address</label>
               <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="work@company.com" className={inputClass} />
             </div>
+
             <div className="space-y-1">
               <label className="text-xs font-semibold text-[#444] block">Password</label>
               <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="••••••••••••" className={inputClass} />
               <p className="text-xs text-[#aaa] mt-1">Must be at least 8 characters long</p>
             </div>
+
             <button
               type="submit" disabled={loading}
-              className="w-full bg-[#0d6644] hover:bg-[#0a5236] text-white font-semibold py-3 rounded-lg text-sm transition-colors disabled:opacity-60 mt-1"
+              className="w-full bg-[#0d6644] hover:bg-[#0a5236] text-white font-semibold py-3 rounded-lg text-sm transition-colors disabled:opacity-60"
             >
               {loading ? 'Creating account…' : 'Create your account'}
             </button>
@@ -140,12 +195,10 @@ export default function SignUpPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <button className="flex items-center justify-center gap-2 py-3 rounded-lg text-[#333] text-sm font-medium border border-[#dde] hover:bg-gray-50 transition-colors bg-white">
-              <GoogleIcon />
-              Google
+              <GoogleIcon /> Google
             </button>
             <button className="flex items-center justify-center gap-2 py-3 rounded-lg text-[#333] text-sm font-medium border border-[#dde] hover:bg-gray-50 transition-colors bg-white">
-              <span className="material-symbols-outlined text-base text-[#555]">corporate_fare</span>
-              Enterprise
+              <span className="material-symbols-outlined text-base text-[#555]">corporate_fare</span> Enterprise
             </button>
           </div>
 
