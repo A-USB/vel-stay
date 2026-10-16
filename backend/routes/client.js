@@ -17,7 +17,6 @@ const {
 const router = express.Router();
 router.use(authenticate, requireClient);
 
-// ─── GET /api/client/dashboard ────────────────────────────────────────────
 router.get("/dashboard", (req, res) => {
   const myBookings = clientBookings.filter(
     (b) => b.clientUserId === req.user.id,
@@ -77,16 +76,22 @@ router.post("/bookings", (req, res) => {
     !isTime(time) ||
     !partySize
   ) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "establishmentId, valid date, valid time, and positive partySize are required",
-      });
+    return res.status(400).json({
+      error:
+        "establishmentId, valid date, valid time, and positive partySize are required",
+    });
   }
 
   const est = establishments.find((e) => e.id === establishmentId);
   if (!est) return res.status(404).json({ error: "Establishment not found" });
+  const today = new Date().toISOString().slice(0, 10);
+  if (date < today) return res.status(400).json({ error: "Choose today or a future date" });
+  if (partySize > est.tableCapacity) {
+    return res.status(400).json({ error: `Party size cannot exceed the capacity of ${est.tableCapacity}` });
+  }
+  if (specialRequests !== undefined && (typeof specialRequests !== "string" || specialRequests.length > 500)) {
+    return res.status(400).json({ error: "Special requests must be 500 characters or fewer" });
+  }
 
   const newBooking = {
     id: uuidv4(),
@@ -122,6 +127,8 @@ router.patch("/bookings/:id", (req, res) => {
   if (req.body.date !== undefined) {
     if (!isIsoDate(req.body.date))
       return res.status(400).json({ error: "Invalid date" });
+    if (req.body.date < new Date().toISOString().slice(0, 10))
+      return res.status(400).json({ error: "Choose today or a future date" });
     booking.date = req.body.date;
   }
   if (req.body.time !== undefined) {
@@ -135,9 +142,14 @@ router.patch("/bookings/:id", (req, res) => {
       return res
         .status(400)
         .json({ error: "Party size must be a positive whole number" });
+    const est = establishments.find((e) => e.id === booking.establishmentId);
+    if (ps > (est?.tableCapacity || 0))
+      return res.status(400).json({ error: `Party size cannot exceed the capacity of ${est.tableCapacity}` });
     booking.partySize = ps;
   }
   if (req.body.specialRequests !== undefined) {
+    if (typeof req.body.specialRequests !== "string" || req.body.specialRequests.length > 500)
+      return res.status(400).json({ error: "Special requests must be 500 characters or fewer" });
     booking.specialRequests = req.body.specialRequests;
   }
   if (req.body.status !== undefined) {
@@ -146,6 +158,8 @@ router.patch("/bookings/:id", (req, res) => {
         .status(400)
         .json({ error: "Clients can only cancel bookings" });
     }
+    if (booking.date < new Date().toISOString().slice(0, 10))
+      return res.status(400).json({ error: "Past bookings cannot be cancelled" });
     booking.status = "cancelled";
   }
 
@@ -236,11 +250,12 @@ router.post("/ratings", (req, res) => {
     score < 1 ||
     score > 5
   ) {
-    return res
-      .status(400)
-      .json({
-        error: "establishmentId and a score between 1 and 5 are required",
-      });
+    return res.status(400).json({
+      error: "establishmentId and a score between 1 and 5 are required",
+    });
+  }
+  if (comment !== undefined && (typeof comment !== "string" || comment.length > 1000)) {
+    return res.status(400).json({ error: "Review comments must be 1,000 characters or fewer" });
   }
 
   const est = establishments.find((e) => e.id === establishmentId);
