@@ -245,7 +245,7 @@ export default function PlaceDetailPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-semibold text-[#666] block mb-1">Date</label>
-                  <input type="date" value={bookForm.date} onChange={e => setBookForm(f => ({ ...f, date: e.target.value }))} className={inputClass} required />
+                <input type="date" min={new Date().toISOString().slice(0, 10)} value={bookForm.date} onChange={e => setBookForm(f => ({ ...f, date: e.target.value }))} className={inputClass} required />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-[#666] block mb-1">Time</label>
@@ -258,7 +258,8 @@ export default function PlaceDetailPage() {
               </div>
               <div>
                 <label className="text-xs font-semibold text-[#666] block mb-1">Special Requests</label>
-                <textarea value={bookForm.specialRequests} onChange={e => setBookForm(f => ({ ...f, specialRequests: e.target.value }))} placeholder="Any dietary requirements, accessibility needs…" rows={3} className={inputClass + ' resize-none'} />
+                <textarea maxLength={500} value={bookForm.specialRequests} onChange={e => setBookForm(f => ({ ...f, specialRequests: e.target.value }))} placeholder="Any dietary requirements, accessibility needs…" rows={3} className={inputClass + ' resize-none'} />
+                <p className="text-right text-xs text-[#aaa]">{bookForm.specialRequests.length}/500</p>
               </div>
               <button type="submit" disabled={bookMutation.isPending} className="w-full bg-[#0d6644] text-white font-semibold py-3 rounded-xl text-sm hover:bg-[#0a5236] transition-colors disabled:opacity-60">
                 {bookMutation.isPending ? 'Booking…' : 'Confirm Booking'}
