@@ -77,10 +77,10 @@ export default function DashboardPage() {
               <div className="w-9 h-9 bg-[#e6f4ee] rounded-lg flex items-center justify-center">
                 <span className="material-symbols-outlined text-[#0d6644] text-lg">home</span>
               </div>
-              <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+12.5%</span>
+              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">This week</span>
             </div>
             <p className="text-xs text-[#888] uppercase tracking-wide font-semibold mb-1">Total Sales</p>
-            <p className="text-2xl font-bold text-[#0d1f1a]">$12,480.00</p>
+            <p className="text-2xl font-bold text-[#0d1f1a]">${Number(stats?.estimatedWeekRevenue || 0).toLocaleString()}</p>
           </div>
 
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
@@ -93,7 +93,7 @@ export default function DashboardPage() {
               </span>
             </div>
             <p className="text-xs text-[#888] uppercase tracking-wide font-semibold mb-1">New Reservations</p>
-            <p className="text-2xl font-bold text-[#0d1f1a]">{stats?.todayReservations ?? 42}</p>
+            <p className="text-2xl font-bold text-[#0d1f1a]">{stats?.todayReservations ?? 0}</p>
           </div>
 
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
@@ -101,7 +101,7 @@ export default function DashboardPage() {
               <div className="w-9 h-9 bg-orange-50 rounded-lg flex items-center justify-center">
                 <span className="material-symbols-outlined text-orange-400 text-lg">table_restaurant</span>
               </div>
-              <span className="text-xs font-semibold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full">Peak Hour</span>
+              <span className="text-xs font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">Capacity</span>
             </div>
             <p className="text-xs text-[#888] uppercase tracking-wide font-semibold mb-1">Active Tables</p>
             <p className="text-2xl font-bold text-[#0d1f1a]">
