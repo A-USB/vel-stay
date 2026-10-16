@@ -2,30 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    font-family: 'Manrope', sans-serif;
-    background-color: #f8f9ff;
-    color: #0b1c30;
-  }
+:root {
+  font-family: 'Manrope', sans-serif;
+  color: #182820;
+  background: #f5f3ed;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #182820;
+  --forest: #1f4938;
+  --leaf: #c8dcce;
+  --paper: #f5f3ed;
 }
 
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-  display: inline-block;
-  vertical-align: middle;
-}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: var(--paper); color: var(--ink); }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
 
-/* Sidebar transition */
-.sidebar-transition {
-  transition: width 0.2s ease, opacity 0.2s ease;
-}
+/* Shared hospitality workspace polish */
+aside { background: #fcfbf7 !important; border-color: #e7e4da !important; }
+main { background: var(--paper); }
+main > div { background: var(--paper); }
+main div[class*="bg-[#f0f2f0]"] { background-color: var(--paper); }
+main [class*="bg-white"] { border-color: #e8e5dc; box-shadow: 0 8px 28px rgba(33, 49, 38, .045); }
+main [class*="rounded-2xl"] { border-radius: 18px; }
+main input, main select, main textarea { border-radius: 10px; }
+main button, main a { transition: background-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease; }
+main a[class*="bg-[#0d6644]"], main button[class*="bg-[#0d6644]"], main a[class*="bg-[#0d3d2e]"], main button[class*="bg-[#0d3d2e]"] { background-color: var(--forest); }
+main a[class*="bg-[#0d6644]"]:hover, main button[class*="bg-[#0d6644]"]:hover, main a[class*="bg-[#0d3d2e]"]:hover, main button[class*="bg-[#0d3d2e]"]:hover { background-color: #15392b; }
+.card-hover { transition: box-shadow .18s ease, transform .18s ease; }
+.card-hover:hover { box-shadow: 0 14px 34px rgba(33,49,38,.1); transform: translateY(-2px); }
 
-/* Card hover */
-.card-hover {
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
-.card-hover:hover {
-  box-shadow: 0 4px 16px rgba(11, 28, 48, 0.1);
-  transform: translateY(-1px);
+@media (max-width: 640px) {
+  main > div > div:first-child { padding-left: 1rem; padding-right: 1rem; }
+  main .p-8 { padding: 1.1rem; }
+  main .px-8 { padding-left: 1rem; padding-right: 1rem; }
+  main table { min-width: 620px; }
 }
