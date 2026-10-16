@@ -9,7 +9,11 @@ const normalizeEmail = email => {
 
 const isEmail = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmail(email));
 
-const isIsoDate = value => /^\d{4}-\d{2}-\d{2}$/.test(value || '') && !Number.isNaN(Date.parse(`${value}T00:00:00`));
+const isIsoDate = value => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+};
 
 const isTime = value => /^([01]\d|2[0-3]):[0-5]\d$/.test(value || '');
 
